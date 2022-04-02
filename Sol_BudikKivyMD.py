@@ -5,7 +5,7 @@ from kivymd.uix.button import MDFillRoundFlatIconButton, MDFillRoundFlatButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.toolbar import MDToolbar
-from Sol_budik import CalcSol
+from Sol_budik import CalcSol,UTCcalc
 from kivy.core.window import Window
 Window.minimum_height = 500
 Window.minimum_width = 500
@@ -62,7 +62,7 @@ class Solarny_Budik(MDApp,CalcSol):
         self.vys4.text = resres[16]
         self.vys5.text = resres[1][0:2] + "°"
         self.vys6.text = resres[2][0:2] + "°"
-        self.vys7.text = resres[2][0:2] + "°"
+        self.vys7.text = str(self.tzzzz) + ""
 
     def build(self):
         screen = MDScreen()

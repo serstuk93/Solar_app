@@ -2,6 +2,7 @@ from geopy.geocoders import Nominatim
 from time import strftime
 from datetime import datetime, timedelta
 from math import pi , cos , sin , acos , tan , radians, degrees , asin , copysign , atan2
+from dateutil import tz
 
 class UTCcalc:
 
@@ -12,18 +13,26 @@ class UTCcalc:
         geolocator = Nominatim(user_agent="anyName")
         tf = TimezoneFinder()
 
-        coords = geolocator.geocode("adresa")
-        timezone1 = tf.timezone_at(lng=coords.longitude, lat=coords.latitude)
-        print(timezone1)
+        coords = geolocator.geocode(adresa)
+        self.timezone1 = tf.timezone_at(lng=coords.longitude, lat=coords.latitude)
+        print("ajooj",self.timezone1)
         import pytz
-        eastern = timezone(timezone1)
+        eastern = timezone(self.timezone1)
         print(eastern.zone)
         fmt = '%Y-%m-%d %H:%M:%S %Z%z'
         loc_dt = eastern.localize(datetime(2022, 3, 22, 11, 30, 0))
+        loc_dt = eastern.localize(datetime.utcnow())
+        naive = datetime.now()
+        print("locdt",loc_dt)
         ams_dt = loc_dt.astimezone(eastern)
         ams_dt.strftime(fmt)
         print(ams_dt.strftime(fmt))
-
+        #konvertuj na lokalny cas
+        tmzn = pytz.timezone(self.timezone1)
+        print(tmzn, "tmzn")
+        aware1 = naive.astimezone(tmzn)
+        lokltime = loc_dt.astimezone(tmzn)
+        print(aware1,"upraveny cas")
 
 class CalcSol:
 
@@ -48,6 +57,7 @@ class CalcSol:
         else:
             cas_zona = -abs(int(strftime("%z")[1:3]))
             print("c",cas_zona)
+        self.tzzzz= cas_zona
         print(rok, mesiac, den , cas_zona, den_v_roku, hodina)
         fr_rok = (2 * pi / 365) * ( den_v_roku -1 + (hodina -12 / 24))
         print(fr_rok)
