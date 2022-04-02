@@ -1,15 +1,32 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.app import MDApp
+from kivy.app import App
+from kivy.lang import Builder
 from kivy.uix.image import Image
 from kivymd.uix.button import MDFillRoundFlatIconButton, MDFillRoundFlatButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.pickers import MDDatePicker
 from Sol_budik import CalcSol,UTCcalc
 from kivy.core.window import Window
 Window.minimum_height = 500
 Window.minimum_width = 500
 
+KV = '''
+MDFloatLayout:
+
+    MDToolbar:
+        title: "MDDatePicker"
+        pos_hint: {"top": 1}
+        elevation: 10
+
+    MDRaisedButton:
+        text: "Open date picker"
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint_y : 0.5
+        on_release: app.show_date_picker()
+'''
 
 class Solarny_Budik(MDApp,CalcSol):
 
@@ -123,6 +140,12 @@ class Solarny_Budik(MDApp,CalcSol):
             font_size = 17,
             pos_hint =  {"center_x": 0.5 , "center_y":0.65},
             on_press = self.convert_R
+        ))
+        screen.add_widget(MDFillRoundFlatButton(
+            text="Zadaj dátum",
+            font_size=17,
+            pos_hint={"center_x": 0.8, "center_y": 0.65},
+            on_press= self.calendars
         ))
         # podrobnosti vysledky
         self.vys1 = MDLabel(
@@ -246,20 +269,46 @@ class Solarny_Budik(MDApp,CalcSol):
         )
         screen.add_widget(self.inf7)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         return screen
+
+
+    def on_save(self, instance, value, date_range):
+      #  self.chosendate = value,
+        print(instance, value, date_range)
+        print(value)
+        #return self.build()
+    def on_cancel(self, instance, value):
+      '''Events called when the "CANCEL" dialog box button is clicked.'''
+
+    def calendars(self,kv):
+        print("ahojj")
+
+
+        return self.show_date_picker()
+
+    def show_date_picker(self):
+        Builder.load_string(KV)
+        self.date_dialog = MDDatePicker()
+        print("kkt")
+        self.date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
+        self.date_dialog.open()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
