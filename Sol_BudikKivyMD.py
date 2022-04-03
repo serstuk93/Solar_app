@@ -28,6 +28,16 @@ MDFloatLayout:
         on_release: app.show_date_picker()
 '''
 
+KV2 = '''
+Screen
+
+    MDSlider:
+        min: 0
+        max: 24
+        value: 12
+'''
+
+
 class Solarny_Budik(MDApp,CalcSol):
 
 
@@ -42,12 +52,19 @@ class Solarny_Budik(MDApp,CalcSol):
         self.vys5.text = ""
         self.vys6.text = ""
         self.vys7.text = ""
+        self.selecteddate="R"
 
-    def convert_R(self,args=0,):
+    def convert_R(self,args=0):
+        if self.selecteddate:
+            self.seldat=self.selecteddate
+            print("seldat")
+        else:
+            self.seldat=""
+
         try:
             val = str(self.input.text)
             if len(val)>3:
-                CalcSol.UTCcl(self, val)
+                CalcSol.UTCcl(self, val, self.seldat)
                 resres = CalcSol.calculations(self, val)
 
                 if resres == None:
@@ -85,8 +102,9 @@ class Solarny_Budik(MDApp,CalcSol):
 
     def build(self):
         screen = MDScreen()
-
+        Builder.load_string(KV2)
         #top toolbar
+        self.selecteddate = ""
         self.theme_cls.theme_style = "Dark"  # "Light"
         self.toolbar = MDToolbar(title="Solárny budík")
         self.toolbar.pos_hint = {"top": 1}
@@ -278,6 +296,7 @@ class Solarny_Budik(MDApp,CalcSol):
       #  self.chosendate = value,
         print(instance, value, date_range)
         print(value)
+        self.selecteddate=value
         #return self.build()
     def on_cancel(self, instance, value):
       '''Events called when the "CANCEL" dialog box button is clicked.'''
@@ -294,6 +313,7 @@ class Solarny_Budik(MDApp,CalcSol):
         print("kkt")
         self.date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         self.date_dialog.open()
+        #print("ahoj",self.on_save)
 
 
 

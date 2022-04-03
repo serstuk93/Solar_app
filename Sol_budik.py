@@ -10,7 +10,7 @@ from timezonefinder import TimezoneFinder
 
 class CalcSol:
 
-    def UTCcl(self,positionAA):
+    def UTCcl(self,positionAA,selecteddate=""):
 
         geolocator = Nominatim(user_agent="anyName")
         tf = TimezoneFinder()
@@ -24,8 +24,23 @@ class CalcSol:
         print(tmzn, "tmzn")
         self.aware1 = naive.astimezone(tmzn)
         print(self.aware1,"upraveny cas")
+
         cazon = re.split(r"(\D+)|(\D-)", str(self.aware1))
+        if selecteddate != None or "":
+               # selecteddate =selecteddate.split("-")
+
+                print("seeeer",selecteddate)
+                selecteddate=str(selecteddate)
+                print(type(selecteddate))
+                print(type(cazon))
+                cazon[0]=  str(selecteddate[0:4])
+                cazon[3] = str(selecteddate[5:7])
+                cazon[6] = str(selecteddate[8:])
+        if selecteddate ==  "R":
+             print("serss")
+             cazon = re.split(r"(\D+)|(\D-)", str(self.aware1))
         self.caz1= cazon
+        print(self.caz1)
         print(cazon)
         cazon = cazon[-6]+cazon[-4]+cazon[-3]+cazon[-1]
         print("cazon",cazon)
@@ -271,8 +286,8 @@ class CalcSol:
 
 
 
-#d = CalcSol()
-# d.UTCcl("sabinov")
+d = CalcSol()
+d.UTCcl("sabinov")
 # d.calculations("sabinov")
 
 #my_locat= CalcSol("sabinov")

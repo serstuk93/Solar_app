@@ -7,10 +7,12 @@ from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 from kivy.garden.matplotlib.backend_kivy import FigureCanvasKivy
 ##!! vyzaduje matplotlib verziu 3.1.3 !!!
+import Graph_data as gd
 
 #graf
-x = [ 1, 2 ,3 ,4 ,5 ]
-y = [ 10,5 ,2,10, 5]
+# x = [ 1, 2 ,3 ,4 ,5 ]
+# y = [ 10,5 ,2,10, 5]
+y,x= gd.x,gd.y
 plt.plot(x,y)
 plt.ylabel("Y osa")
 plt.xlabel("X osa")
