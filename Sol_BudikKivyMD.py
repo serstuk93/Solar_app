@@ -52,19 +52,22 @@ class Solarny_Budik(MDApp, CalcSol):
         self.vys5.text = ""
         self.vys6.text = ""
         self.vys7.text = ""
-        self.selecteddate = "R"
+        self.selecteddate = ""
 
     def convert_R(self, args=0):
         if self.selecteddate:
             self.seldat = self.selecteddate
             print("seldat")
         else:
-            self.seldat = "R"
-            self.selecteddate = "R"
+            self.seldat = ""
+            self.selecteddate = ""
         try:
             val = str(self.input.text)
             if len(val) > 3:
-                CalcSol.UTCcl(self, val, self.seldat)
+               # CalcSol.UTCcl(self, val, self.seldat)
+                if CalcSol.UTCcl(self, val, self.seldat) != None:
+                    self.label.text = "Mesto neexistuje"
+                    return self.convert_R
                 resres = CalcSol.calculations(self, val)
 
                 if resres == None:
@@ -100,7 +103,7 @@ class Solarny_Budik(MDApp, CalcSol):
         screen = MDScreen()
         Builder.load_string(KV2)
         # top toolbar
-        
+        self.selecteddate = ""
         self.theme_cls.theme_style = "Dark"  # "Light"
         self.toolbar = MDToolbar(title="Solárny budík")
         self.toolbar.pos_hint = {"top": 1}

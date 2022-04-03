@@ -16,8 +16,12 @@ class CalcSol:
         tf = TimezoneFinder()
         # location = geolocator.geocode(positionAA)
         # print(location.address)
-        coords = geolocator.geocode(positionAA)
-        self.timezone1 = tf.timezone_at(lng=coords.longitude, lat=coords.latitude)
+        self.coords = geolocator.geocode(positionAA)
+        print("coords",self.coords)
+        if self.coords == None:
+            resres="Zadané mesto nenájdené"
+            return resres
+        self.timezone1 = tf.timezone_at(lng=self.coords.longitude, lat=self.coords.latitude)
         print("ajooj", self.timezone1)
         naive = datetime.now()
         tmzn = pytz.timezone(self.timezone1)
