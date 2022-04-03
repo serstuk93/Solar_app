@@ -7,10 +7,10 @@
 from datetime import datetime
 print(datetime.utcnow())
 
-from Sol_budik import UTCcalc
-xy = UTCcalc()
+from Sol_budik import CalcSol
+xy = CalcSol()
 xy.UTCcl("sydney")
 
-print(xy)
+#print(xy)
 
 

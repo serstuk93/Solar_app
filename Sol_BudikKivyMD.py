@@ -8,7 +8,7 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.pickers import MDDatePicker
-from Sol_budik import CalcSol,UTCcalc
+from Sol_budik import CalcSol
 from kivy.core.window import Window
 Window.minimum_height = 500
 Window.minimum_width = 500
@@ -43,11 +43,13 @@ class Solarny_Budik(MDApp,CalcSol):
         self.vys6.text = ""
         self.vys7.text = ""
 
-    def convert_R(self,args=0):
+    def convert_R(self,args=0,):
         try:
             val = str(self.input.text)
             if len(val)>3:
+                CalcSol.UTCcl(self, val)
                 resres = CalcSol.calculations(self, val)
+
                 if resres == None:
                     self.label.text = "Nezadal si správnu adresu"
                     #self.label.text = location
@@ -77,9 +79,9 @@ class Solarny_Budik(MDApp,CalcSol):
         self.vys2.text = resres[17]
         self.vys3.text = resres[18]
         self.vys4.text = resres[16]
-        self.vys5.text = resres[1][0:2] + "°"
-        self.vys6.text = resres[2][0:2] + "°"
-        self.vys7.text = str(self.tzzzz) + ""
+        self.vys5.text = resres[1][0:5] + "°"
+        self.vys6.text = resres[2][0:5] + "°"
+        self.vys7.text = self.caz
 
     def build(self):
         screen = MDScreen()

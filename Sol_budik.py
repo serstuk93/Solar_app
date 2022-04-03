@@ -3,52 +3,61 @@ from time import strftime
 from datetime import datetime, timedelta
 from math import pi , cos , sin , acos , tan , radians, degrees , asin , copysign , atan2
 from dateutil import tz
+import re
+import pytz
+from timezonefinder import TimezoneFinder
 
-class UTCcalc:
-
-    def UTCcl(self,adresa):
-
-        from timezonefinder import TimezoneFinder
-        from pytz import timezone
-        geolocator = Nominatim(user_agent="anyName")
-        tf = TimezoneFinder()
-
-        coords = geolocator.geocode(adresa)
-        self.timezone1 = tf.timezone_at(lng=coords.longitude, lat=coords.latitude)
-        print("ajooj",self.timezone1)
-        import pytz
-        eastern = timezone(self.timezone1)
-        print(eastern.zone)
-        fmt = '%Y-%m-%d %H:%M:%S %Z%z'
-        loc_dt = eastern.localize(datetime(2022, 3, 22, 11, 30, 0))
-        loc_dt = eastern.localize(datetime.utcnow())
-        naive = datetime.now()
-        print("locdt",loc_dt)
-        ams_dt = loc_dt.astimezone(eastern)
-        ams_dt.strftime(fmt)
-        print(ams_dt.strftime(fmt))
-        #konvertuj na lokalny cas
-        tmzn = pytz.timezone(self.timezone1)
-        print(tmzn, "tmzn")
-        aware1 = naive.astimezone(tmzn)
-        lokltime = loc_dt.astimezone(tmzn)
-        print(aware1,"upraveny cas")
 
 class CalcSol:
 
-    def calculations(self, positionAA):
+    def UTCcl(self,positionAA):
 
-        x = strftime("%a, %d %b %Y %H:%M:%S")
-        rok = int(strftime("%y"))
-        mesiac = int(strftime("%m"))
-        den = int(strftime("%d"))
+        geolocator = Nominatim(user_agent="anyName")
+        tf = TimezoneFinder()
+        # location = geolocator.geocode(positionAA)
+        # print(location.address)
+        coords = geolocator.geocode(positionAA)
+        self.timezone1 = tf.timezone_at(lng=coords.longitude, lat=coords.latitude)
+        print("ajooj",self.timezone1)
+        naive = datetime.now()
+        tmzn = pytz.timezone(self.timezone1)
+        print(tmzn, "tmzn")
+        self.aware1 = naive.astimezone(tmzn)
+        print(self.aware1,"upraveny cas")
+        cazon = re.split(r"(\D+)|(\D-)", str(self.aware1))
+        self.caz1= cazon
+        print(cazon)
+        cazon = cazon[-6]+cazon[-4]+cazon[-3]+cazon[-1]
+        print("cazon",cazon)
+        self.caz = cazon
+
+    def calculations(self, positionAA):
+        # x = strftime("%a, %d %b %Y %H:%M:%S")
+        # rok = int(strftime("%y"))
+        # print(type(rok))
+        # mesiac = int(strftime("%m"))
+        # den = int(strftime("%d"))
+        # den_v_roku = int(strftime("%j"))
+        # cas_zona = int(strftime("%z"))
+        # hodina = int(strftime("%H"))
+        # minuta =int(strftime("%M"))
+        # sekunda  = int(strftime("%S"))
+
+        # x = strftime("%a, %d %m %Y %H:%M:%S")
+        # print("X",x)
+        # print(type(x))
+        # print("CC",self.caz1)
+        rok = int(self.caz1[0])
+        mesiac = int(self.caz1[3])
+        den = int(self.caz1[6])
         den_v_roku = int(strftime("%j"))
-        cas_zona = int(strftime("%z"))
-        hodina = int(strftime("%H"))
-        minuta =int(strftime("%M"))
-        sekunda  = int(strftime("%S"))
+        cas_zona = int(self.caz1[21])
+        print(cas_zona, "caz zona")
+        hodina = int(self.caz1[9])
+        minuta =int(self.caz1[12])
+        sekunda  = int(self.caz1[15])
         print(den)
-        print(x)
+
         print("cas zona",strftime("%z"))
 
         if strftime("%z")[0]=="+":
@@ -57,12 +66,22 @@ class CalcSol:
         else:
             cas_zona = -abs(int(strftime("%z")[1:3]))
             print("c",cas_zona)
-        self.tzzzz= cas_zona
-        print(rok, mesiac, den , cas_zona, den_v_roku, hodina)
+        self.tzzzz= float(cas_zona)
+        print(self.tzzzz,"tzzz")
+        print(type(self.tzzzz))
+        self.tzzzz =self.caz1[19] + str(cas_zona)
+        print(self.tzzzz, "tzzz")
+        self.tzzzz=int(self.tzzzz)
+        print(self.tzzzz, "tzzz")
+        print(rok, mesiac, den , self.tzzzz, den_v_roku, hodina)
         fr_rok = (2 * pi / 365) * ( den_v_roku -1 + (hodina -12 / 24))
-        print(fr_rok)
-        cas= (strftime("%H:%M:%S"))
+        print("fr_rok", fr_rok)
+       # cas= (strftime("%H:%M:%S"))
+       # cas=(hodina+":"+minuta+":"+sekunda+":")
+        cas= f"{hodina:02d}:{minuta:02d}:{sekunda:02d}"
+        print(cas[0:2],cas[3:5])
         cas_val = (int(cas[0:2])*60+int(cas[3:5]))/24/60
+        print("2")
         print(cas_val,  "Cas val")
         print(cas )
         print("cas",cas[0:2])
@@ -76,47 +95,14 @@ class CalcSol:
         print(location.address)
         print((location.latitude, location.longitude))
         svet_sirka = location.longitude
-        # eq_time = 229.18* radians(0.000075+ 0.001868* cos(fr_rok) - 0.032077* sin(fr_rok)
-        #                    -0.014615*cos(2*(fr_rok))-0.040849*sin(2*(fr_rok)))
-        # decl_ang= 0.006918-0.399912*cos(fr_rok)+0.070257*sin(fr_rok)-0.006758*cos(2*fr_rok)+\
-        #           0.000907*sin(2*fr_rok)-0.002697*cos(3*fr_rok)+0.00148*sin(3*fr_rok)
-        # print(decl_ang)
-        # print("eq time", eq_time)
-        #
-        # solarny_cas = eq_time + 4*svet_sirka - 60*cas_zona
-        # print("time offset",solarny_cas)
-        # tst= hodina *60 + minuta  +sekunda/60 + solarny_cas
-        #
-        # sol_hod_uhol = (tst /4)-180
-        # sol_zenit = sin(location.latitude)* sin(decl_ang)+cos(location.latitude)*cos(decl_ang)*cos(sol_hod_uhol)
-        #
-        # sol_azimut = (- sin(location.latitude)* sol_zenit - sin(decl_ang))/cos(location.latitude)*sin(sol_zenit)
-        #
-        # print(sol_zenit,sol_azimut)
-        #
-        # ha = ( (cos(90.833)/(cos(location.latitude)*cos(decl_ang)))-tan(location.latitude)*tan(decl_ang)  )
-        # sunrise= 720-4*(location.longitude+ ha) - eq_time
-        # snoon = 720-4*(location.longitude) - eq_time
-        # print(ha)
-        # print("sun",sunrise,snoon)
-        #
-        #
-        # t1 = (23.45)* sin( 360/degrees(365)*(70+284))
-        # t2= (284+75)* (360/365)
-        # t3 = sin(t2)
-        # t4 = 23.45*(360*(80-70)/degrees(365))
-        # print(t1, t2 ,t3,t4)
-        # print(degrees(decl_ang))
-        # #t5 = degrees(asin(sin(radians(R2))*sin(radians(P2))))
-
-
-
-        date_time_str = f'{den}/{mesiac}/{rok} {hodina}:{minuta}:{sekunda}'
+        date_time_str = f'{den:02d}/{mesiac:02d}/{rok} {hodina:02d}:{minuta:02d}:{sekunda:02d}'
         date_time_str_sol = f'{hodina}:{minuta}:{sekunda}'
         print(date_time_str)
         print(type(date_time_str))
         print(date_time_str_sol)
-        date_time_obj = datetime.strptime(date_time_str, '%d/%m/%y %H:%M:%S')
+        date_time_obj = datetime.strptime(date_time_str
+                                          ,'%d/%m/%Y %H:%M:%S'
+                                          )
         print('The type of the date is now', type(date_time_obj))
         print(date_time_obj)
         date_time_sol=datetime.strptime(date_time_str_sol, '%H:%M:%S')
@@ -212,7 +198,7 @@ class CalcSol:
             obliq_corr_deg,"obliq_corr_deg", sun_rt_ascen_deg,"sun_rt_ascen_deg ", sun_declin_deg,"sun_declin_deg  ", var_y,"var_y  ",
             eq_of_time_minutes,"eq_of_time_minutes  ",
         )
-        solar_noon_LST=(720-4*location.longitude-eq_of_time_minutes+cas_zona*60)/1440
+        solar_noon_LST=(720-4*location.longitude-eq_of_time_minutes+self.tzzzz*60)/1440
         print(solar_noon_LST, "solar_noon_LST")
         sunrise_time_LST=solar_noon_LST-ha_sunrise_deg*4/1440
         print(sunrise_time_LST,"Sunrise")
@@ -285,8 +271,9 @@ class CalcSol:
 
 
 
-d = CalcSol()
-d.calculations("sabinov")
+#d = CalcSol()
+# d.UTCcl("sabinov")
+# d.calculations("sabinov")
 
 #my_locat= CalcSol("sabinov")
 #my_locat.calculations("sabinov")
