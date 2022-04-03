@@ -10,6 +10,7 @@ from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.pickers import MDDatePicker
 from Sol_budik import CalcSol
 from kivy.core.window import Window
+
 Window.minimum_height = 500
 Window.minimum_width = 500
 
@@ -27,7 +28,7 @@ MDFloatLayout:
         size_hint_y : 0.5
         on_release: app.show_date_picker()
 '''
-
+#zatial nefungujuci slider
 KV2 = '''
 Screen
 
@@ -38,13 +39,12 @@ Screen
 '''
 
 
-class Solarny_Budik(MDApp,CalcSol):
-
+class Solarny_Budik(MDApp, CalcSol):
 
     def flip(self):
         self.result_calc.text = ""
         self.label.text = ""
-        self.input.text= ""
+        self.input.text = ""
         self.vys1.text = ""
         self.vys2.text = ""
         self.vys3.text = ""
@@ -52,24 +52,24 @@ class Solarny_Budik(MDApp,CalcSol):
         self.vys5.text = ""
         self.vys6.text = ""
         self.vys7.text = ""
-        self.selecteddate="R"
+        self.selecteddate = "R"
 
-    def convert_R(self,args=0):
+    def convert_R(self, args=0):
         if self.selecteddate:
-            self.seldat=self.selecteddate
+            self.seldat = self.selecteddate
             print("seldat")
         else:
-            self.seldat=""
-
+            self.seldat = "R"
+            self.selecteddate = "R"
         try:
             val = str(self.input.text)
-            if len(val)>3:
+            if len(val) > 3:
                 CalcSol.UTCcl(self, val, self.seldat)
                 resres = CalcSol.calculations(self, val)
 
                 if resres == None:
                     self.label.text = "Nezadal si správnu adresu"
-                    #self.label.text = location
+                    # self.label.text = location
                     return self.convert_R
                 else:
                     print("ahoj")
@@ -84,14 +84,10 @@ class Solarny_Budik(MDApp,CalcSol):
             self.input.text = ""
             return self.convert_R
 
-
-
-
-
         self.result_calc.text = resres[20]
         self.label.text = "Dnešný dátum je "
 
-        #podrobne vysl hodnoty
+        # podrobne vysl hodnoty
         self.vys1.text = resres[0]
         self.vys2.text = resres[17]
         self.vys3.text = resres[18]
@@ -103,76 +99,75 @@ class Solarny_Budik(MDApp,CalcSol):
     def build(self):
         screen = MDScreen()
         Builder.load_string(KV2)
-        #top toolbar
-        self.selecteddate = ""
+        # top toolbar
+        
         self.theme_cls.theme_style = "Dark"  # "Light"
         self.toolbar = MDToolbar(title="Solárny budík")
         self.toolbar.pos_hint = {"top": 1}
         self.toolbar.right_action_items = [
-            ["rotate-3d-variant", lambda x:self.flip()]]
-
+            ["rotate-3d-variant", lambda x: self.flip()]]
 
         screen.add_widget(self.toolbar)
 
-        #logo
-        screen.add_widget(Image(source="sun-rise-1148031.jpg",allow_stretch= True, keep_ratio = False,
-                                #height = 220, width = 220,
-                               # pos=(100, 500),
-                               # allow_stretch: True,
-                                #size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
+        # logo
+        screen.add_widget(Image(source="sun-rise-1148031.jpg", allow_stretch=True, keep_ratio=False,
+                                # height = 220, width = 220,
+                                # pos=(100, 500),
+                                # allow_stretch: True,
+                                # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
 
-                               # size_hint=(1, 0.4),
-                                size_hint_min=(500,500),
-                                size=(500,1010),
-                                pos_hint= {"center_x":0.5, "center_y":0.4 }
-        ))
+                                # size_hint=(1, 0.4),
+                                size_hint_min=(500, 500),
+                                size=(500, 1010),
+                                pos_hint={"center_x": 0.5, "center_y": 0.4}
+                                ))
         self.input = MDTextField(
             text="",
-            hint_text =  "Zadaj svoju adresu ( mesto ) ",
+            hint_text="Zadaj svoju adresu ( mesto ) ",
 
             halign="center",
 
-            size_hint= (0.8,1),
+            size_hint=(0.8, 1),
             pos_hint={"center_x": 0.5, "center_y": 0.80},
-            font_size = 22
+            font_size=22
         )
         screen.add_widget(self.input)
-        #label primanrny aj sekundarny
-        self.label=MDLabel(
+        # label primanrny aj sekundarny
+        self.label = MDLabel(
 
             halign="center",
             pos_hint={"center_x": 0.5, "center_y": 0.75},
-            theme_text_color = "Secondary",
+            theme_text_color="Secondary",
 
         )
-        self.result_calc=MDLabel(
+        self.result_calc = MDLabel(
 
             halign="center",
             pos_hint={"center_x": 0.5, "center_y": 0.70},
-            theme_text_color = "Primary",
-            font_style = "H5"
+            theme_text_color="Primary",
+            font_style="H5"
         )
         screen.add_widget(self.label)
         screen.add_widget(self.result_calc)
-        #button convert
+        # button convert
         screen.add_widget(MDFillRoundFlatButton(
             text="Vypočítaj",
-            font_size = 17,
-            pos_hint =  {"center_x": 0.5 , "center_y":0.65},
-            on_press = self.convert_R
+            font_size=17,
+            pos_hint={"center_x": 0.5, "center_y": 0.65},
+            on_press=self.convert_R
         ))
         screen.add_widget(MDFillRoundFlatButton(
             text="Zadaj dátum",
             font_size=17,
             pos_hint={"center_x": 0.8, "center_y": 0.65},
-            on_press= self.calendars
+            on_press=self.calendars
         ))
         # podrobnosti vysledky
         self.vys1 = MDLabel(
 
             halign="left",
-            size_hint_min= (150,200),
-            pos_hint={"center_x":  0.9, "center_y": 0.6},
+            size_hint_min=(150, 200),
+            pos_hint={"center_x": 0.9, "center_y": 0.6},
             theme_text_color="Secondary",
 
         )
@@ -291,19 +286,18 @@ class Solarny_Budik(MDApp,CalcSol):
 
         return screen
 
-
     def on_save(self, instance, value, date_range):
-      #  self.chosendate = value,
+        #  self.chosendate = value,
         print(instance, value, date_range)
         print(value)
-        self.selecteddate=value
-        #return self.build()
+        self.selecteddate = value
+        # return self.build()
+
     def on_cancel(self, instance, value):
-      '''Events called when the "CANCEL" dialog box button is clicked.'''
+        '''Events called when the "CANCEL" dialog box button is clicked.'''
 
-    def calendars(self,kv):
+    def calendars(self, kv):
         print("ahojj")
-
 
         return self.show_date_picker()
 
@@ -313,25 +307,7 @@ class Solarny_Budik(MDApp,CalcSol):
         print("kkt")
         self.date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         self.date_dialog.open()
-        #print("ahoj",self.on_save)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # print("ahoj",self.on_save)
 
 
 if __name__ == "__main__":
