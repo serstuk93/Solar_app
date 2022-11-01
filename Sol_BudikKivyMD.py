@@ -6,7 +6,7 @@ from kivy.uix.image import Image
 from kivymd.uix.button import MDFillRoundFlatIconButton, MDFillRoundFlatButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
-from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.pickers import MDDatePicker
 from Sol_budik import CalcSol
 from kivy.core.window import Window
@@ -17,7 +17,7 @@ Window.minimum_width = 500
 KV = '''
 MDFloatLayout:
 
-    MDToolbar:
+    MDTopAppBar:
         title: "MDDatePicker"
         pos_hint: {"top": 1}
         elevation: 10
@@ -39,7 +39,7 @@ Screen
 '''
 
 
-class Solarny_Budik(MDApp, CalcSol):
+class Solarny_Kalkukator(MDApp, CalcSol):
 
     def flip(self):
         self.result_calc.text = ""
@@ -105,7 +105,7 @@ class Solarny_Budik(MDApp, CalcSol):
         # top toolbar
         self.selecteddate = ""
         self.theme_cls.theme_style = "Dark"  # "Light"
-        self.toolbar = MDToolbar(title="Solárny budík")
+        self.toolbar = MDTopAppBar(title="Solárny kalkulátor")
         self.toolbar.pos_hint = {"top": 1}
         self.toolbar.right_action_items = [
             ["rotate-3d-variant", lambda x: self.flip()]]
@@ -314,4 +314,4 @@ class Solarny_Budik(MDApp, CalcSol):
 
 
 if __name__ == "__main__":
-    Solarny_Budik().run()
+    Solarny_Kalkukator().run()
