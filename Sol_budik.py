@@ -372,9 +372,13 @@ class CalcSol:
         return resres
 
 
-d = CalcSol()
-d.UTCcl("sabinov")
+
 # d.calculations("sabinov")
 
 # my_locat= CalcSol("sabinov")
 # my_locat.calculations("sabinov")
+
+
+if __name__ == '__main__':
+    d = CalcSol()
+    d.UTCcl("sabinov")
