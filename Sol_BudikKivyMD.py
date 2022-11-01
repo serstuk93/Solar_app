@@ -1,6 +1,18 @@
 # kivy needs xsel or xclip installed in linux via apt get install
 
+
+
+
+from kivy import Config
+Config.set('graphics', 'width', '500')
+Config.set('graphics', 'height', '800')
+Config.set('graphics', 'minimum_width', '500')
+Config.set('graphics', 'minimum_height', '800')
+
+
+
 from datetime import datetime, timedelta
+from operator import index
 from kivy.clock import Clock
 
 from kivymd.uix.screen import MDScreen
@@ -15,9 +27,11 @@ from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.pickers import MDDatePicker
 from Sol_budik import CalcSol
 from kivy.core.window import Window
+from kivy.uix.image import Image
+from kivy.uix.floatlayout import FloatLayout
 
-Window.minimum_height = 500
-Window.minimum_width = 500
+Window.minimum_height = 800
+Window.minimum_width =500
 
 KV = """
 MDFloatLayout:
@@ -111,6 +125,8 @@ class Solar_Calc(MDApp, CalcSol):
     def build(self):
         self.theme_cls.primary_palette = "Gray"  # "Purple", "Red"
         screen = MDScreen()
+        # screen.size_hint_max_x =500
+    
         Builder.load_string(KV2)
         # top toolbar
         self.selecteddate = ""
@@ -131,29 +147,29 @@ class Solar_Calc(MDApp, CalcSol):
                 # allow_stretch: True,
                 # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
                 # size_hint=(1, 0.4),
-                size_hint_min=(500, 500),
-                size=(500, 1010),
-                pos_hint={"center_x": 0.5, "center_y": 0.4},
+                #size_hint_min=(500, 500),
+                #size=(500, 1010),
+                pos_hint={"center_x": 0.5, "center_y": 0.405},
             )
         )
         self.input = MDTextField(
             text="",
             hint_text="Location",
             halign="center",
-            size_hint=(0.8, 1),
-            pos_hint={"center_x": 0.5, "center_y": 0.80},
+            size_hint=(0.8, 0.4),
+            pos_hint={"center_x": 0.5, "center_y": 0.85},
             font_size=22,
         )
         screen.add_widget(self.input)
         # label primanrny aj sekundarny
         self.label = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.5, "center_y": 0.75},
+            pos_hint={"center_x": 0.5, "center_y": 0.8},
             theme_text_color="Secondary",
         )
         self.result_calc = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.5, "center_y": 0.70},
+            pos_hint={"center_x": 0.5, "center_y": 0.75},
             theme_text_color="Primary",
             font_style="H5",
         )
@@ -163,61 +179,63 @@ class Solar_Calc(MDApp, CalcSol):
         screen.add_widget(
             MDFillRoundFlatButton(
                 text="Calculate",
+                halign="left",
                 font_size=17,
-                pos_hint={"center_x": 0.5, "center_y": 0.65},
+                pos_hint={ "center_x": 0.2, "center_y": 0.7},
                 on_press=self.convert_R,
-            )
-        )
+                theme_text_color="Secondary",
+        ))
         screen.add_widget(
             MDFillRoundFlatButton(
                 text="Select date",
                 font_size=17,
-                pos_hint={"center_x": 0.8, "center_y": 0.65},
+                pos_hint={"center_x": 0.79, "center_y": 0.7},
                 on_press=self.calendars,
             )
         )
         # podrobnosti vysledky
         self.vys1 = MDLabel(
-            halign="left",
-            size_hint_min=(150, 200),
-            pos_hint={"center_x": 0.9, "center_y": 0.6},
+            halign="center",
+            size_hint_min=(100, 200),
+            size_hint_x = 0.5,
+            pos_hint={"center_x": 0.75, "center_y": 0.6},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys1)
         self.vys2 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.55},
+            pos_hint={"center_x": 0.75, "center_y": 0.55},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys2)
         self.vys3 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.5},
+            pos_hint={"center_x": 0.75, "center_y": 0.5},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys3)
         self.vys4 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.45},
+            pos_hint={"center_x": 0.75, "center_y": 0.45},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys4)
         self.vys5 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.4},
+            pos_hint={"center_x": 0.75, "center_y": 0.4},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys5)
         self.vys6 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.35},
+            pos_hint={"center_x": 0.75, "center_y": 0.35},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys6)
 
         self.vys7 = MDLabel(
             halign="center",
-            pos_hint={"center_x": 0.45, "center_y": 0.3},
+            pos_hint={"center_x": 0.75, "center_y": 0.3},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.vys7)
@@ -225,7 +243,7 @@ class Solar_Calc(MDApp, CalcSol):
         self.inf1 = MDLabel(
             text="Selected Location",
             halign="left",
-            pos_hint={"center_x": 0.6, "center_y": 0.60},
+            pos_hint={"center_x": 0.6, "center_y": 0.6},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf1)
@@ -261,7 +279,7 @@ class Solar_Calc(MDApp, CalcSol):
             text="Terrestrial Longitude",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.35},
-            theme_text_color="Secondary",
+            theme_text_color="Primary",
         )
         screen.add_widget(self.inf6)
         self.inf7 = MDLabel(
@@ -272,6 +290,22 @@ class Solar_Calc(MDApp, CalcSol):
         )
         screen.add_widget(self.inf7)
 
+        screen.add_widget(
+            Image(
+                source="w1.jpg",
+                allow_stretch=True,
+                keep_ratio=True,
+                # height = 220, width = 220,
+                
+                # allow_stretch: True,
+                # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
+                size_hint=(0.8, 0.25),
+                # size_hint_min=(200, 200),
+                # size=(100, 100),
+                #pos=(200, 200),
+                pos_hint={"center_x":.5, "y": 0.01},
+                ),index=0)
+
         def my_callback(dt):
             if self.result_calc.text != "":
                 datetime_object = datetime.strptime(
@@ -281,7 +315,8 @@ class Solar_Calc(MDApp, CalcSol):
                 datetime_object = datetime_object + d
                 datetime_object = datetime_object.strftime("%d/%m/%Y %H:%M:%S")
                 self.result_calc.text = str(datetime_object)
-                
+
+
         Clock.schedule_interval(my_callback, 1)
 
         return screen
