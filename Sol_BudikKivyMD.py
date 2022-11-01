@@ -1,6 +1,7 @@
 # kivy needs xsel or xclip installed in linux via apt get install 
 
 
+
 from kivymd.uix.screen import MDScreen
 from kivymd.app import MDApp
 from kivy.app import App
@@ -42,11 +43,9 @@ Screen
 """
 
 
-class Solarny_Kalkukator(MDApp, CalcSol):
-    def flip(self):
+class Solar_Calc(MDApp, CalcSol):
+    def reset(self):
         self.result_calc.text = ""
-        self.label.text = ""
-        self.input.text = ""
         self.vys1.text = ""
         self.vys2.text = ""
         self.vys3.text = ""
@@ -54,6 +53,11 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         self.vys5.text = ""
         self.vys6.text = ""
         self.vys7.text = ""
+
+    def flip(self):
+        self.reset()
+        self.label.text = ""
+        self.input.text = ""
         self.selecteddate = ""
 
     def convert_R(self, args=0):
@@ -63,33 +67,51 @@ class Solarny_Kalkukator(MDApp, CalcSol):
             self.seldat = ""
             self.selecteddate = ""
         try:
-            val = str(self.input.text)
+            val = str(self.input.text).capitalize()
+            self.input.text = self.input.text.capitalize()
             if len(val) > 3:
                 # CalcSol.UTCcl(self, val, self.seldat)
                 if CalcSol.UTCcl(self, val, self.seldat) != None:
-                    self.label.text = "Mesto neexistuje"
+                    self.reset()
+                    self.label.text = "Location does not exist"
                     return self.convert_R
                 resres = CalcSol.calculations(self, val)
 
                 if resres == None:
-                    self.label.text = "Nezadal si správnu adresu"
-                    # self.label.text = location
+                    self.reset()
+                    self.label.text = "Wrong adress"
                     return self.convert_R
                 else:
                     print("passed")
             else:
-                self.result_calc.text = ""
-                self.label.text = "Nesprávna hodnota"
-                self.input.text = ""
+                self.reset()
+                self.label.text = "Wrong value"
                 return self.convert_R
         except ValueError:
             self.result_calc.text = ""
-            self.label.text = "Nesprávna hodnota"
+            self.label.text = "Wrong value"
             self.input.text = ""
             return self.convert_R
 
+        self.label.text = "Current time"
         self.result_calc.text = resres[20]
-        self.label.text = "Dnešný dátum je "
+
+
+        # TODO add multithreading for actual time
+        def time_actualization(self):
+            from datetime import datetime,timedelta
+            print(self.result_calc.text)
+            datetime_object = datetime.strptime(self.result_calc.text, r'%d/%m/%Y %H:%M:%S')
+            print(type(datetime_object))
+            print(datetime_object)
+            d = timedelta(seconds=1)
+            from time import sleep
+            while True:
+                sleep(0.5)
+                datetime_object = datetime_object + d 
+                print(datetime_object)
+                self.result_calc.text  = str(datetime_object)
+
 
         # podrobne vysl hodnoty
         self.vys1.text = resres[0]
@@ -101,12 +123,13 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         self.vys7.text = self.caz
 
     def build(self):
+        self.theme_cls.primary_palette = "Gray"  # "Purple", "Red"
         screen = MDScreen()
         Builder.load_string(KV2)
         # top toolbar
         self.selecteddate = ""
-        self.theme_cls.theme_style = "Dark"  # "Light"
-        self.toolbar = MDTopAppBar(title="Solárny kalkulátor")
+        self.theme_cls.theme_style = "Light"  # "Light"
+        self.toolbar = MDTopAppBar(title="Solar Calculator")
         self.toolbar.pos_hint = {"top": 1}
         self.toolbar.right_action_items = [["rotate-3d-variant", lambda x: self.flip()]]
         screen.add_widget(self.toolbar)
@@ -114,7 +137,7 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         # logo
         screen.add_widget(
             Image(
-                source="sun-rise-1148031.jpg",
+                source="background.png",
                 allow_stretch=True,
                 keep_ratio=False,
                 # height = 220, width = 220,
@@ -129,7 +152,7 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         )
         self.input = MDTextField(
             text="",
-            hint_text="Zadaj svoju adresu ( mesto ) ",
+            hint_text="Location",
             halign="center",
             size_hint=(0.8, 1),
             pos_hint={"center_x": 0.5, "center_y": 0.80},
@@ -153,7 +176,7 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         # button convert
         screen.add_widget(
             MDFillRoundFlatButton(
-                text="Vypočítaj",
+                text="Calculate",
                 font_size=17,
                 pos_hint={"center_x": 0.5, "center_y": 0.65},
                 on_press=self.convert_R,
@@ -161,7 +184,7 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         )
         screen.add_widget(
             MDFillRoundFlatButton(
-                text="Zadaj dátum",
+                text="Select date",
                 font_size=17,
                 pos_hint={"center_x": 0.8, "center_y": 0.65},
                 on_press=self.calendars,
@@ -214,49 +237,49 @@ class Solarny_Kalkukator(MDApp, CalcSol):
         screen.add_widget(self.vys7)
 
         self.inf1 = MDLabel(
-            text="Tvoja zadaná poloha",
+            text="Selected Location",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.60},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf1)
         self.inf2 = MDLabel(
-            text="Čas východu slnka",
+            text="Sunrise time",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.55},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf2)
         self.inf3 = MDLabel(
-            text="Čas západu slnka",
+            text="Sunset time",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.5},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf3)
         self.inf4 = MDLabel(
-            text="Poludnie",
+            text="Noon",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.45},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf4)
         self.inf5 = MDLabel(
-            text="Zemepisná šírka",
+            text="Geographical Latitude",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.4},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf5)
         self.inf6 = MDLabel(
-            text="Zemepisná výška",
+            text="Terrestrial Longitude",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.35},
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf6)
         self.inf7 = MDLabel(
-            text="Časové pásmo",
+            text="Timezone",
             halign="left",
             pos_hint={"center_x": 0.6, "center_y": 0.3},
             theme_text_color="Secondary",
@@ -288,4 +311,4 @@ class Solarny_Kalkukator(MDApp, CalcSol):
 
 
 if __name__ == "__main__":
-    Solarny_Kalkukator().run()
+    Solar_Calc().run()

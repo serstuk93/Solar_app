@@ -11,12 +11,11 @@ from timezonefinder import TimezoneFinder
 
 class CalcSol:
     def UTCcl(self, positionAA, selecteddate=""):
-
         geolocator = Nominatim(user_agent="anyName")
         tf = TimezoneFinder()
         self.coords = geolocator.geocode(positionAA)
         if self.coords == None:
-            resres = "Zadané mesto nenájdené"
+            resres = "Adress not found"
             return resres
         self.timezone1 = tf.timezone_at(
             lng=self.coords.longitude, lat=self.coords.latitude
@@ -63,7 +62,7 @@ class CalcSol:
         geolocator = Nominatim(user_agent="Sol_budik")
         location = geolocator.geocode(positionAA)
         if location == None:
-            print("nespravna lokacia")
+            print("incorrect location")
             return None
         else:
             print(location)
