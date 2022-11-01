@@ -1,6 +1,7 @@
-# kivy needs xsel or xclip installed in linux via apt get install 
+# kivy needs xsel or xclip installed in linux via apt get install
 
-
+from datetime import datetime, timedelta
+from kivy.clock import Clock
 
 from kivymd.uix.screen import MDScreen
 from kivymd.app import MDApp
@@ -96,22 +97,7 @@ class Solar_Calc(MDApp, CalcSol):
         self.label.text = "Current time"
         self.result_calc.text = resres[20]
 
-
-        # TODO add multithreading for actual time
-        def time_actualization(self):
-            from datetime import datetime,timedelta
-            print(self.result_calc.text)
-            datetime_object = datetime.strptime(self.result_calc.text, r'%d/%m/%Y %H:%M:%S')
-            print(type(datetime_object))
-            print(datetime_object)
-            d = timedelta(seconds=1)
-            from time import sleep
-            while True:
-                sleep(0.5)
-                datetime_object = datetime_object + d 
-                print(datetime_object)
-                self.result_calc.text  = str(datetime_object)
-
+        # Clock.schedule_once(my_callback, 5)
 
         # podrobne vysl hodnoty
         self.vys1.text = resres[0]
@@ -285,6 +271,18 @@ class Solar_Calc(MDApp, CalcSol):
             theme_text_color="Secondary",
         )
         screen.add_widget(self.inf7)
+
+        def my_callback(dt):
+            if self.result_calc.text != "":
+                datetime_object = datetime.strptime(
+                    self.result_calc.text, "%d/%m/%Y %H:%M:%S"
+                )
+                d = timedelta(seconds=1)
+                datetime_object = datetime_object + d
+                datetime_object = datetime_object.strftime("%d/%m/%Y %H:%M:%S")
+                self.result_calc.text = str(datetime_object)
+                
+        Clock.schedule_interval(my_callback, 1)
 
         return screen
 
