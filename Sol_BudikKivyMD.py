@@ -11,6 +11,8 @@ Config.set('graphics', 'minimum_height', '800')
 
 import io
 from kivy.core.image import Image as CoreImage
+from PIL import Image, ImageOps
+
 
 from datetime import datetime, timedelta
 from operator import index
@@ -65,6 +67,10 @@ class Solar_Calc(MDApp, CalcSol):
         super().__init__(**kwargs)
         self.resres = None
         self.new_map = None
+        self.t1 = "t1.jpg"
+        self.imt1 = Image(source = 't1.jpg')
+
+        
 
     def reset(self):
         self.result_calc.text = ""
@@ -77,6 +83,7 @@ class Solar_Calc(MDApp, CalcSol):
         self.vys7.text = ""
         self.resres = None
         self.default_map()
+        self.imt1.reload()
 
     def flip(self):
         self.reset()
@@ -118,26 +125,15 @@ class Solar_Calc(MDApp, CalcSol):
             return self.convert_R
 
         self.drw = self.map_draw()
+        self.imt1.reload()
         if self.drw != None:
             print("BBBB")
-            self.screen.add_widget(
-            Image(
-                source="w1.jpg",
-                allow_stretch=True,
-                keep_ratio=True,
-                # height = 220, width = 220,
-                # allow_stretch: True,
-                # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
-                size_hint=(0.8, 0.25),
-                # size_hint_min=(200, 200),
-                # size=(100, 100),
-                #pos=(200, 200),
-                pos_hint={"center_x":.5, "y": 0.01},
-                ),index=0)
             
             self.screen.add_widget(
             Image(
-                source=self.drw,
+
+                source="t1.jpg",
+                nocache = True,
                 allow_stretch=True,
                 keep_ratio=True,
                 # height = 220, width = 220,
@@ -149,7 +145,7 @@ class Solar_Calc(MDApp, CalcSol):
                 # size=(100, 100),
                 #pos=(200, 200),
                 pos_hint={"center_x":.5, "y": 0.01},
-                ),index=0)
+                ))
             
             self.drw= None 
         self.label.text = "Current time"
@@ -381,14 +377,46 @@ class Solar_Calc(MDApp, CalcSol):
             print(f"resres {self.resres[1]}")
             self.map_generator = MapLocator(self.resres[1],self.resres[2])
             img_loc = self.map_generator.img_map_generator()
+
+
+            
+
+            """
+            print("A",img_loc)
+            view = Image.open(io.BytesIO(img_loc))
+            print(view)
+            # x = Image.open(img_loc)
+
+            #view.show()
+            #im = CoreImage(view, ext="png")
+            # print("B",im)
+
+            from kivy.uix.image import Image as VIM, CoreImage
+
+            f=open("t1.jpg",'rb')
+
+            binary_data= f.read() #image opened in binary mode
+
+            data = io.BytesIO(binary_data)
+            img=CoreImage(data, ext="png").texture
+
+            new_img= VIM()
+            new_img.texture= img
+            print(new_img)
+            self.screen.add_widget(new_img
+                )
+
+            """
             self.screen.add_widget(
                 Image(
-                    source= "t1.jpg",
+                    source='t1.jpg',
+                    nocache = True,
                     allow_stretch=True,
                     keep_ratio=True,
                     size_hint=(0.8, 0.25),
                     pos_hint={"center_x":.5, "y": 0.01 },
                     ))
+            
             return img_loc
 
 

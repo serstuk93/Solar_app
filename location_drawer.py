@@ -18,6 +18,10 @@ class MapLocator:
         self.image = Image.open("temp.jpg", mode='r', formats=None)
         self.image = ImageOps.fit(self.image, size, bleed=0.0, centering=(0.5, 0.5))
 
+
+
+
+
     def pixel_coords(self):
 
         # long lat 
@@ -40,12 +44,42 @@ class MapLocator:
         return locat
 
     def img_map_generator(self):
+        
         self.image_merger()
         print("A")
         self.imgl = "t1.jpg"
         self.image.paste(self.pin_img , self.pixel_coords())
         self.image = self.image.save(self.imgl)
+        print(self.image)
+
+        """
+        import io
+        # BytesIO is a fake file stored in memory
+        imgByteArr = io.BytesIO()
+        # image.save expects a file as a argument, passing a bytes io ins
+        self.image.save(imgByteArr, format='PNG')
+        # Turn the BytesIO object back into a bytes object
+        imgByteArr = imgByteArr.getvalue()
+        ss = Image.open(io.BytesIO(imgByteArr))
+        print("SS",ss)
+        # ss.show()
+        """
+
+
+        return "t1.jpg"
+       
+
+        """
+       # data = BytesIO(open(self.image, "rb").read())
+        self.image.save(byte_io, 'PNG')
+        print(byte_io)
+        #self.image.show()
+        return imgByteArr
         # self.image.show()
+        """
+
+
+
         """
         # Write PIL Image to in-memory PNG
         membuf = BytesIO()
