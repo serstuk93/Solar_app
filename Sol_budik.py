@@ -10,7 +10,9 @@ from timezonefinder import TimezoneFinder
 
 
 class CalcSol:
-    def UTCcl(self, positionAA, selecteddate=""):
+    def UTCcl(
+        self, positionAA, selecteddate=""
+    ):  # positionAA is name of town, select date is date from kivymd calendar
         geolocator = Nominatim(user_agent="anyName")
         tf = TimezoneFinder()
         self.coords = geolocator.geocode(positionAA)
@@ -55,12 +57,12 @@ class CalcSol:
         self.tzzzz = self.caz1[19] + str(cas_zona)
         self.tzzzz = int(self.tzzzz)
         fr_rok = (2 * pi / 365) * (den_v_roku - 1 + (hodina - 12 / 24))
-        # cas= (strftime("%H:%M:%S"))
-        # cas=(hodina+":"+minuta+":"+sekunda+":")
         cas = f"{hodina:02d}:{minuta:02d}:{sekunda:02d}"
         cas_val = (int(cas[0:2]) * 60 + int(cas[3:5])) / 24 / 60
         geolocator = Nominatim(user_agent="Sol_budik")
-        location = geolocator.geocode(positionAA)
+        location = geolocator.geocode(
+            positionAA, language="en"
+        )  # language set to ENGLISH
         if location == None:
             print("incorrect location")
             return None
@@ -166,30 +168,6 @@ class CalcSol:
                 cos(radians(sun_app_long_deg)),
             )
         )
-        """
-        print(
-            "!!!!!!!!",
-            degrees(
-                atan2(
-                    cos(radians(obliq_corr_deg)) * sin(radians(sun_app_long_deg)),
-                    (cos(radians(sun_app_long_deg))),
-                )
-            ),
-        )
-        print(
-            cos(radians(obliq_corr_deg)) * sin(radians(sun_app_long_deg)),
-            (cos(radians(sun_app_long_deg))),
-        )
-
-        print(
-            degrees(
-                atan2(
-                    cos(radians(obliq_corr_deg)) * sin(radians(sun_app_long_deg)),
-                    (cos(radians(sun_app_long_deg))),
-                )
-            )
-        )
-        """
 
         sun_declin_deg = degrees(
             asin(sin(radians(obliq_corr_deg)) * sin(radians(sun_app_long_deg)))
@@ -216,27 +194,7 @@ class CalcSol:
                 - tan(radians(location.latitude)) * tan(radians(sun_declin_deg))
             )
         )
-        """print(
-            sun_rad_vector_AUs,
-            "sun_rad_vector_AUs OK ",
-            sun_app_long_deg,
-            "sun_app_long_deg OK",
-            mean_obliq_ecliptic_deg,
-            "mean_obliq_ecliptic_deg OK ",
-        )
-         print(
-            obliq_corr_deg,
-            "obliq_corr_deg",
-            sun_rt_ascen_deg,
-            "sun_rt_ascen_deg ",
-            sun_declin_deg,
-            "sun_declin_deg  ",
-            var_y,
-            "var_y  ",
-            eq_of_time_minutes,
-            "eq_of_time_minutes  ",
-        )
-        """
+
         solar_noon_LST = (
             720 - 4 * location.longitude - eq_of_time_minutes + self.tzzzz * 60
         ) / 1440
@@ -372,13 +330,7 @@ class CalcSol:
         return resres
 
 
-
-# d.calculations("sabinov")
-
-# my_locat= CalcSol("sabinov")
-# my_locat.calculations("sabinov")
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     d = CalcSol()
     d.UTCcl("sabinov")
+    d.calculations("sabinov")

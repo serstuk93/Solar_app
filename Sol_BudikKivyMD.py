@@ -1,17 +1,12 @@
 # kivy needs xsel or xclip installed in linux via apt get install
 
 
-
-
 from kivy import Config
-Config.set('graphics', 'width', '500')
-Config.set('graphics', 'height', '800')
-Config.set('graphics', 'minimum_width', '500')
-Config.set('graphics', 'minimum_height', '800')
 
-import io
-from kivy.core.image import Image as CoreImage
-from PIL import Image, ImageOps
+Config.set("graphics", "width", "500")
+Config.set("graphics", "height", "800")
+Config.set("graphics", "minimum_width", "500")
+Config.set("graphics", "minimum_height", "800")
 
 
 from datetime import datetime, timedelta
@@ -31,11 +26,10 @@ from kivymd.uix.pickers import MDDatePicker
 from Sol_budik import CalcSol
 from kivy.core.window import Window
 from kivy.uix.image import Image
-from kivy.uix.floatlayout import FloatLayout
 from location_drawer import MapLocator
 
 Window.minimum_height = 800
-Window.minimum_width =500
+Window.minimum_width = 500
 
 KV = """
 MDFloatLayout:
@@ -68,11 +62,9 @@ class Solar_Calc(MDApp, CalcSol):
         self.resres = None
         self.new_map = None
         self.t1 = "t1.jpg"
-        self.imt1 = Image(source = 't1.jpg')
+        self.imt1 = Image(source="t1.jpg")
 
-        
-
-    def reset(self):
+    def reset(self):  # function for reset button
         self.result_calc.text = ""
         self.vys1.text = ""
         self.vys2.text = ""
@@ -85,13 +77,13 @@ class Solar_Calc(MDApp, CalcSol):
         self.default_map()
         self.imt1.reload()
 
-    def flip(self):
+    def flip(self):  # flip handler
         self.reset()
         self.label.text = ""
         self.input.text = ""
         self.selecteddate = ""
 
-    def convert_R(self, args=0):
+    def convert_R(self, args=0):  # function for convert button
         if self.selecteddate:
             self.seldat = self.selecteddate
         else:
@@ -99,7 +91,7 @@ class Solar_Calc(MDApp, CalcSol):
             self.selecteddate = ""
         try:
             val = str(self.input.text).capitalize()
-            self.input.text = self.input.text.capitalize()
+            self.input.text = self.input.text.capitalize()  # return capitalized input
             if len(val) > 3:
                 # CalcSol.UTCcl(self, val, self.seldat)
                 if CalcSol.UTCcl(self, val, self.seldat) != None:
@@ -124,34 +116,31 @@ class Solar_Calc(MDApp, CalcSol):
             self.input.text = ""
             return self.convert_R
 
-        self.drw = self.map_draw()
-        self.imt1.reload()
-        if self.drw != None:
-            print("BBBB")
-            
-            self.screen.add_widget(
-            Image(
+        self.drw = self.map_draw()  # generate map
+        self.imt1.reload()  # reload map img when changed
 
-                source="t1.jpg",
-                nocache = True,
-                allow_stretch=True,
-                keep_ratio=True,
-                # height = 220, width = 220,
-                
-                # allow_stretch: True,
-                # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
-                size_hint=(0.8, 0.25),
-                # size_hint_min=(200, 200),
-                # size=(100, 100),
-                #pos=(200, 200),
-                pos_hint={"center_x":.5, "y": 0.01},
-                ))
-            
-            self.drw= None 
+        if self.drw != None:  # widget with map reloading
+            self.screen.add_widget(
+                Image(
+                    source="t1.jpg",
+                    nocache=True,
+                    allow_stretch=True,
+                    keep_ratio=True,
+                    # height = 220, width = 220,
+                    # allow_stretch: True,
+                    # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
+                    size_hint=(0.8, 0.25),
+                    # size_hint_min=(200, 200),
+                    # size=(100, 100),
+                    # pos=(200, 200),
+                    pos_hint={"center_x": 0.5, "y": 0.01},
+                )
+            )
+
+            self.drw = None
+
         self.label.text = "Current time"
         self.result_calc.text = self.resres[20]
-
-        # Clock.schedule_once(my_callback, 5)
 
         # podrobne vysl hodnoty
         self.vys1.text = self.resres[0]
@@ -162,13 +151,14 @@ class Solar_Calc(MDApp, CalcSol):
         self.vys6.text = self.resres[2][0:5] + "°"
         self.vys7.text = self.caz
 
-        
-
     def build(self):
+        """
+        APP builder
+        """
         self.theme_cls.primary_palette = "Gray"  # "Purple", "Red"
         self.screen = MDScreen()
         # screen.size_hint_max_x =500
-    
+
         Builder.load_string(KV2)
         # top toolbar
         self.selecteddate = ""
@@ -189,8 +179,8 @@ class Solar_Calc(MDApp, CalcSol):
                 # allow_stretch: True,
                 # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
                 # size_hint=(1, 0.4),
-                #size_hint_min=(500, 500),
-                #size=(500, 1010),
+                # size_hint_min=(500, 500),
+                # size=(500, 1010),
                 pos_hint={"center_x": 0.5, "center_y": 0.405},
             )
         )
@@ -223,10 +213,11 @@ class Solar_Calc(MDApp, CalcSol):
                 text="Calculate",
                 halign="left",
                 font_size=17,
-                pos_hint={ "center_x": 0.2, "center_y": 0.7},
+                pos_hint={"center_x": 0.2, "center_y": 0.7},
                 on_press=self.convert_R,
                 theme_text_color="Secondary",
-        ))
+            )
+        )
         self.screen.add_widget(
             MDFillRoundFlatButton(
                 text="Select date",
@@ -239,7 +230,7 @@ class Solar_Calc(MDApp, CalcSol):
         self.vys1 = MDLabel(
             halign="center",
             size_hint_min=(100, 200),
-            size_hint_x = 0.5,
+            size_hint_x=0.5,
             pos_hint={"center_x": 0.75, "center_y": 0.6},
             theme_text_color="Secondary",
         )
@@ -334,10 +325,7 @@ class Solar_Calc(MDApp, CalcSol):
 
         self.default_map()
 
-            
-
-
-        def my_callback(dt):
+        def my_callback(dt):  # function for actual time counting
             if self.result_calc.text != "":
                 datetime_object = datetime.strptime(
                     self.result_calc.text, "%d/%m/%Y %H:%M:%S"
@@ -347,78 +335,46 @@ class Solar_Calc(MDApp, CalcSol):
                 datetime_object = datetime_object.strftime("%d/%m/%Y %H:%M:%S")
                 self.result_calc.text = str(datetime_object)
 
-
-        Clock.schedule_interval(my_callback, 1)
+        Clock.schedule_interval(my_callback, 1)  # refresh time every second
 
         return self.screen
 
-    def default_map(self):
+    def default_map(
+        self,
+    ):  # show default map image when app is builded without pinned location
         self.screen.add_widget(
             Image(
                 source="w1.jpg",
                 allow_stretch=True,
                 keep_ratio=True,
                 # height = 220, width = 220,
-                
                 # allow_stretch: True,
                 # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
                 size_hint=(0.8, 0.25),
                 # size_hint_min=(200, 200),
                 # size=(100, 100),
-                #pos=(200, 200),
-                pos_hint={"center_x":.5, "y": 0.01},
-                ))
+                # pos=(200, 200),
+                pos_hint={"center_x": 0.5, "y": 0.01},
+            )
+        )
 
-
-    def map_draw(self):
-        print("AAAAAAAAA")
-        
+    def map_draw(self):  # generate new map with pin in it as selected location
         if self.resres != None:
             print(f"resres {self.resres[1]}")
-            self.map_generator = MapLocator(self.resres[1],self.resres[2])
+            self.map_generator = MapLocator(self.resres[1], self.resres[2])
             img_loc = self.map_generator.img_map_generator()
-
-
-            
-
-            """
-            print("A",img_loc)
-            view = Image.open(io.BytesIO(img_loc))
-            print(view)
-            # x = Image.open(img_loc)
-
-            #view.show()
-            #im = CoreImage(view, ext="png")
-            # print("B",im)
-
-            from kivy.uix.image import Image as VIM, CoreImage
-
-            f=open("t1.jpg",'rb')
-
-            binary_data= f.read() #image opened in binary mode
-
-            data = io.BytesIO(binary_data)
-            img=CoreImage(data, ext="png").texture
-
-            new_img= VIM()
-            new_img.texture= img
-            print(new_img)
-            self.screen.add_widget(new_img
-                )
-
-            """
             self.screen.add_widget(
                 Image(
-                    source='t1.jpg',
-                    nocache = True,
+                    source="t1.jpg",
+                    nocache=True,
                     allow_stretch=True,
                     keep_ratio=True,
                     size_hint=(0.8, 0.25),
-                    pos_hint={"center_x":.5, "y": 0.01 },
-                    ))
-            
-            return img_loc
+                    pos_hint={"center_x": 0.5, "y": 0.01},
+                )
+            )
 
+            return img_loc
 
     def on_save(self, instance, value, date_range):
         #  self.chosendate = value,
