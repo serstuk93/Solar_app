@@ -76,6 +76,7 @@ class Solar_Calc(MDApp, CalcSol):
         self.resres = None
         self.default_map()
         self.imt1.reload()
+        self.drw = None
 
     def flip(self):  # flip handler
         self.reset()
@@ -118,8 +119,10 @@ class Solar_Calc(MDApp, CalcSol):
 
         self.drw = self.map_draw()  # generate map
         self.imt1.reload()  # reload map img when changed
-
+        
         if self.drw != None:  # widget with map reloading
+           
+            
             self.screen.add_widget(
                 Image(
                     source="t1.jpg",
@@ -136,9 +139,9 @@ class Solar_Calc(MDApp, CalcSol):
                     pos_hint={"center_x": 0.5, "y": 0.01},
                 )
             )
-
+            
             self.drw = None
-
+        
         self.label.text = "Current time"
         self.result_calc.text = self.resres[20]
 
@@ -347,6 +350,7 @@ class Solar_Calc(MDApp, CalcSol):
                 source="w1.jpg",
                 allow_stretch=True,
                 keep_ratio=True,
+                nocache=True,
                 # height = 220, width = 220,
                 # allow_stretch: True,
                 # size_hint_y: 0, # Tells the layout to ignore the size_hint in y dir
@@ -363,6 +367,7 @@ class Solar_Calc(MDApp, CalcSol):
             print(f"resres {self.resres[1]}")
             self.map_generator = MapLocator(self.resres[1], self.resres[2])
             img_loc = self.map_generator.img_map_generator()
+            """
             self.screen.add_widget(
                 Image(
                     source="t1.jpg",
@@ -373,7 +378,7 @@ class Solar_Calc(MDApp, CalcSol):
                     pos_hint={"center_x": 0.5, "y": 0.01},
                 )
             )
-
+            """
             return img_loc
 
     def on_save(self, instance, value, date_range):
@@ -400,3 +405,8 @@ class Solar_Calc(MDApp, CalcSol):
 
 if __name__ == "__main__":
     Solar_Calc().run()
+
+
+#TODO add button for language change, change variable in sol_budik location = geolocator.geocode
+# TODO fix primary secondary fonts 
+# TODO memory leak fix 
