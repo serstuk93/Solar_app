@@ -155,17 +155,20 @@ class Solar_Calc(MDApp, CalcSol):
         self.vys7.text = self.caz
 
     def build(self):
+        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.theme_style = "Dark"
+     #   self.theme_cls.primary_hue = "200"  # "500"
         """
         APP builder
         """
-        self.theme_cls.primary_palette = "Gray"  # "Purple", "Red"
+        #self.theme_cls.primary_palette = "Gray"  # "Purple", "Red"
         self.screen = MDScreen()
         # screen.size_hint_max_x =500
 
         Builder.load_string(KV2)
         # top toolbar
         self.selecteddate = ""
-        self.theme_cls.theme_style = "Light"  # "Light"
+        #self.theme_cls.theme_style = "Light"  # "Light"
         self.toolbar = MDTopAppBar(title="Solar Calculator")
         self.toolbar.pos_hint = {"top": 1}
         self.toolbar.right_action_items = [["rotate-3d-variant", lambda x: self.flip()]]
@@ -184,9 +187,8 @@ class Solar_Calc(MDApp, CalcSol):
                 # size_hint=(1, 0.4),
                 # size_hint_min=(500, 500),
                 # size=(500, 1010),
-                pos_hint={"center_x": 0.5, "center_y": 0.405},
-            )
-        )
+                pos_hint={"center_x": 0.5, "center_y": 0.405},))
+
         self.input = MDTextField(
             text="",
             hint_text="Location",
@@ -211,14 +213,15 @@ class Solar_Calc(MDApp, CalcSol):
         self.screen.add_widget(self.label)
         self.screen.add_widget(self.result_calc)
         # button convert
+        from kivymd.uix.button import MDRectangleFlatButton
         self.screen.add_widget(
-            MDFillRoundFlatButton(
+            MDRectangleFlatButton(
                 text="Calculate",
                 halign="left",
                 font_size=17,
                 pos_hint={"center_x": 0.2, "center_y": 0.7},
                 on_press=self.convert_R,
-                theme_text_color="Secondary",
+                #theme_text_color="Secondary",
             )
         )
         self.screen.add_widget(

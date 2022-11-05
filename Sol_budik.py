@@ -33,37 +33,22 @@ class CalcSol:
             cazon[3] = str(selecteddate[5:7])
             cazon[6] = str(selecteddate[8:])
         if selecteddate == "":
-          #  print("cazon",cazon)
             cazon = re.split(r"(\D+)|(\D-)", str(self.aware1))
-           # print("cazon",cazon)
         self.caz1 = cazon
-        print("caz1", self.caz1)
-        cazon = cazon[-6] + cazon[-4] + cazon[-3] + cazon[-1]
-        print("cazon",cazon)
-        self.caz = cazon
+        # print("caz1", self.caz1)
+        self.caz = cazon[-6] + cazon[-4] + cazon[-3] + cazon[-1]
 
     def calculations(self, positionAA):
         rok = int(self.caz1[0])
         mesiac = int(self.caz1[3])
         den = int(self.caz1[6])
         den_v_roku = int(strftime("%j"))
-        cas_zona = int(self.caz1[21])
+        # cas_zona = int(self.caz1[21])
         cas_zona = int(self.caz[:3])
-        print(cas_zona, "caz zona")
         hodina = int(self.caz1[9])
         minuta = int(self.caz1[12])
         sekunda = int(self.caz1[15])
-        print("STRF",strftime("%z"))
-        """
-        if strftime("%z")[0] == "+":
-            cas_zona = int(strftime("%z")[1:3])
-        else:
-            cas_zona = -abs(int(strftime("%z")[1:3]))
-       
-        self.tzzzz = float(cas_zona)
-        self.tzzzz = self.caz1[19] + str(cas_zona)
-        self.tzzzz = int(self.tzzzz)
-         """
+        # print("STRF",strftime("%z"))
         self.tzzzz =  cas_zona
         fr_rok = (2 * pi / 365) * (den_v_roku - 1 + (hodina - 12 / 24))
         cas = f"{hodina:02d}:{minuta:02d}:{sekunda:02d}"
@@ -203,13 +188,10 @@ class CalcSol:
                 - tan(radians(location.latitude)) * tan(radians(sun_declin_deg))
             )
         )
-        print("LONG,EQ TIME, TZ",location.longitude, eq_of_time_minutes, self.tzzzz)
         solar_noon_LST = (
             720 - 4 * location.longitude - eq_of_time_minutes + self.tzzzz * 60
         ) / 1440
         sunrise_time_LST = solar_noon_LST - ha_sunrise_deg * 4 / 1440
-        print("SNOON",solar_noon_LST)
-        print("SS1",sunrise_time_LST)
         sunset_time_LST = solar_noon_LST + ha_sunrise_deg * 4 / 1440
         sunlight_duration_minutes = 8 * ha_sunrise_deg
         true_solar_time_min = (
@@ -305,17 +287,14 @@ class CalcSol:
         # MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2)))));360))
 
         sunrise_time_LST = str(timedelta(days=sunrise_time_LST, seconds=0))[0:9]
-        print("SS",sunrise_time_LST)
         sunrise_time_LST = sunrise_time_LST.split(":", maxsplit=2)
         sunrise_time_LST = ":".join(sunrise_time_LST[0:2])
         sunset_time_LST = str(timedelta(days=sunset_time_LST, seconds=0))[0:9]
         sunset_time_LST = sunset_time_LST.split(":", maxsplit=2)
         sunset_time_LST = ":".join(sunset_time_LST[0:2])
-        print("SUNSET", sunset_time_LST)
         solar_noon_LST = str(timedelta(days=solar_noon_LST, seconds=0))[0:9]
         solar_noon_LST = solar_noon_LST.split(":", maxsplit=2)
         solar_noon_LST = ":".join(solar_noon_LST[0:2])
-        print("NOON", solar_noon_LST)
 
         resres = [
             location.address,
@@ -341,7 +320,6 @@ class CalcSol:
             date_time_str,
         ]
         resres = [str(x) for x in resres]
-        print(resres)
         return resres
 
 
