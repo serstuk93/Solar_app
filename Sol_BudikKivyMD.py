@@ -192,7 +192,7 @@ class Sol_Calc(MDApp):
             self.seldat = ""
             self.selecteddate = ""
         try:
-            val = str(self.input_value()).capitalize()
+            val = str(self.input_value()).title()
             self.root.get_screen("screen_1").ids.input_field_1.text = val
             if len(val) > 3:
                 # CalcSol.UTCcl(self, val, self.seldat)
@@ -304,4 +304,6 @@ Sol_Calc().run()
 # TODO add button for language change, change variable in sol_budik location = geolocator.geocode
 # TODO fix primary secondary fonts
 # TODO memory leak fix
-# TOOD add time selector not just date
+# TODO add time selector not just date
+# TODO cape town location adjust
+# TODO reykjavik location adjust 
