@@ -320,15 +320,16 @@ class CalcSol:
             date_time_str,
         ]
         resres = [str(x) for x in resres]
+       # print(resres)
         return resres
 
 
 if __name__ == "__main__":
     d = CalcSol()
-    d.UTCcl("tokio")
-    d.calculations("tokio")
+  #  d.UTCcl("tokio")
+   # d.calculations("tokio")
    # d.UTCcl("sabinov")
    # d.calculations("sabinov")
-    d.UTCcl("new york")
-    d.calculations("new york")
+  #  d.UTCcl("new york")
+  #  d.calculations("new york")
 

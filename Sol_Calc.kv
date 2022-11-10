@@ -1,0 +1,516 @@
+
+
+
+<TooltipMDIconButton@MDIconButton+MDTooltip>
+MDScreenManager:
+    MenuScreen:
+    PlotScreen:
+    AboutScreen:
+    GitScreen:
+
+
+
+<MenuScreen>:
+
+
+   # MDBoxLayout:
+
+    MDNavigationRail:
+        elevation: 4
+        shadow_radius: 5
+        shadow_offset: 0, 4
+        MDNavigationRailItem:
+            text: "Calculator"
+            icon: "sun-clock"
+            on_release :
+                app.root.current ="screen_1"
+            #    root.manager.transition.direction = 'left'
+
+        MDNavigationRailItem:
+            text: "Plot"
+            icon: "file-table"
+            on_release :
+                app.root.current ="screen_2"
+                #   root.manager.transition.direction = 'right'
+
+        MDNavigationRailItem:
+            text: "About"
+            icon: "creative-commons"
+            on_release : app.root.current ="screen_3"
+
+        MDNavigationRailItem:
+            text: "Git"
+            icon: "git"
+            on_release : app.root.current ="screen_4"
+
+
+    MDScreen:
+        name: "screen_1"
+
+
+
+        MDCard:
+            id : "crd"
+            focus_behavior: True
+            ripple_behavior: True
+            orientation: "horizontal"
+            padding: 20, 0, 0 , "0dp"
+            #size_hint: .87, .1
+            spacing:20
+            #pos_hint: {"center_x": .55, "center_y": 0.94}
+            size_hint : None, None
+            size : (root.width-120,60)
+            pos: (100, 0)
+            pos_hint: {"center_y": 0.94}
+            elevation: 4
+            shadow_radius: 6
+            shadow_offset: 0, 2
+
+            MDLabel:
+                size: self.size
+                halign: "left"
+                valign: "center"   
+                text: "Solar Calculator"
+                bold: True
+                font_style: "H5"
+            MDRectangleFlatButton:
+                text: "Theme style - {}".format(app.theme_cls.theme_style)
+                on_release: app.switch_theme_style()
+                pos_hint: {"center_x": .5, "center_y": 0.5}
+            TooltipMDIconButton:                     
+                icon: "restart"
+                tooltip_text: "Clear input"
+                on_release: app.reset()
+                pos_hint: {"center_x": .5, "center_y": .5}         
+
+        MDBoxLayout:
+            spacing: 20
+            orientation: "horizontal"
+            padding: 10, 0, 20 , "30dp"
+            size_hint : None, None
+            size : (root.width-120,60)
+            pos: (100, 0)
+            pos_hint: {"center_y": 0.84}
+
+
+            MDLabel:
+                text: "Search"
+              #  pos_hint: {"top": 1, "x" : 0.1}
+                halign: "left"
+                valign: "center"
+                size_hint : None,None
+                size : (100,0)
+                bold: True
+                font_style: "H5"
+                
+            MDTextField:
+                
+                id : input_field_1
+                on_text_validate: app.convert_R(),
+                icon_left: "map-search"
+                hint_text: "Location"
+                helper_text: "City"
+                pos : (200,0)
+                helper_text_mode: "persistent"
+                max_text_length: 25
+                pos_hint: {"right": .5, "center_y": 0.5}
+
+
+            MDRectangleFlatButton:
+                text: "Calculate"
+                on_release: app.convert_R()
+                pos_hint: {"right": .5, "center_y": 0}
+
+            MDRectangleFlatButton:
+                text: "Select date"
+                on_release : app.calendars()
+                pos_hint: {"right": .5, "center_y": 0}
+
+
+        MDCard:
+        #    md_bg_color:  app.theme_cls.primary_color
+            focus_behavior: True
+            ripple_behavior: True
+            orientation: "vertical"
+          #  spacing: 10
+            padding: 10, 10, 0 , "16dp"
+            size_hint : None, None
+            size : (root.width-120,160)
+            
+            pos: (100, 0)
+            #pos_hint: {"x": 0.1,"center_y": 0.7}
+            pos_hint: {"center_y": 0.7}
+            elevation: 4
+            shadow_radius: 6
+            shadow_offset: 0, 2
+          #  radius: [5, 5, 40, 5, ]
+            MDBoxLayout:
+                padding: 00, 10, 10 , "10dp"
+                orientation: "horizontal"
+                MDLabel:
+                 #   md_bg_color: "red"
+                    id : date_val_label
+                    text: "Selected Date"
+            #     size_hint: .5, 0.1
+                    size: self.size
+                  #  pos_hint: {"center_x": 0, "top": 0}
+                    halign: "left"
+                    valign: "center"
+                    bold: True
+                    font_style: "H6"
+                MDLabel:
+                    id : date_val
+                    text: ""
+            #     size_hint: .5, 0.1
+                    size: self.size
+              #      pos_hint: {"center_x": 0.5, "top": 0}
+                    halign: "right"
+                    valign: "center"
+                    bold: True
+                   # font_style: "H4"
+            MDBoxLayout:
+                padding: 00, 10, 10 , "10dp"
+                orientation: "horizontal"
+                MDLabel:
+                 #   md_bg_color: "red"
+                    id : time_val_label
+                    text: ""
+            #     size_hint: .5, 0.1
+                    size: self.size
+                  #  pos_hint: {"center_x": 0, "top": 0}
+                    halign: "left"
+                    valign: "center"
+                    bold: True
+                    font_style: "H6"
+                MDLabel:
+                    id : time_val
+                    text: ""
+            #     size_hint: .5, 0.1
+                    size: self.size
+              #      pos_hint: {"center_x": 0.5, "top": 0}
+                    halign: "right"
+                    valign: "center"
+                    bold: True
+                   # font_style: "H4"
+            MDBoxLayout:
+                padding: 00, 10, 10 , "10dp"
+                orientation: "horizontal"
+                MDLabel:
+                  #  md_bg_color: "red"
+                    id : location_val_label
+                    text: ""
+            #     size_hint: .5, 0.1
+                    size: self.size
+                  #  pos_hint: {"center_x": 0, "top": 0}
+                    halign: "left"
+                    valign: "center"
+                    bold: True
+                    font_style: "H6"
+                MDLabel:
+                    id : location_val
+                    text: ""
+            #     size_hint: .5, 0.1
+                    size: self.size
+              #      pos_hint: {"center_x": 0.5, "top": 0}
+                    halign: "right"
+                    valign: "center"
+                    bold: True
+                 #   font_style: "H4"
+
+
+        MDBoxLayout:
+            pos_hint: {"top": 0.62}
+            orientation: "vertical"
+            spacing: 0
+            padding: 00, 20, 0 , "36dp"
+         #   size_hint_max_x:700
+           # size_hint_max_y:250
+            size_hint: None,None
+            size : (root.width - 150,250)
+            right: (60)
+          #  pos_hint_y :  {"top": 0.6}
+            
+      
+            
+
+        #   md_bg_color: "red"  # app.theme_cls.primary_color
+
+                
+
+
+
+          #  MDSeparator:
+                
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Sunrise time"
+                MDLabel:
+                    id : sunrise_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+            
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Sunset time"
+                MDLabel:
+                    id : sunset_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Noon"
+                MDLabel:
+                    id : noon_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Geographical Latitude"
+                MDLabel:
+                    id : lat_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Terrestrial Longitude"
+                MDLabel:
+                    id : long_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDLabel:
+                    size_hint_x: None
+                    size : (200,50)
+                    text: "Timezone"
+                MDLabel:
+                    id : tz_val
+                    text: ""
+                    halign: "right"
+                    valign: "center"
+            MDSeparator:
+
+        MDCard:
+            md_bg_color: app.theme_cls.primary_color
+        #  focus_behavior: True
+        #   ripple_behavior: True
+           # size_hint: .9, .3
+            pos_hint: {"y": 0.005}
+            elevation: 4
+            shadow_radius: 6
+            shadow_offset: 0, 2
+            size_hint: None,None
+            size : (600,305)
+            right: (root.width/2+300+25+10)
+         #   halign: "center"
+          #  valign: "center"
+         #   size_hint_max_x:450
+         #   size_hint_max_y:225
+            size_hint_min_y:150
+
+            Image:
+                
+                id : mapimg
+                source:"w1.jpg"
+                nocache:True
+                allow_stretch:True
+                keep_ratio:True
+                size_hint:(1, 1)
+                halign: "center"
+                valign: "center"
+                pos_hint:{"center_x": 0.5, "center_y": .5}
+
+<PlotScreen>:
+    MDScreen:
+        name : "screen_2"
+        MDBoxLayout:
+
+            MDNavigationRail:
+                elevation: 4
+                shadow_radius: 5
+                shadow_offset: 0, 4
+                MDNavigationRailItem:
+                    text: "Calculator"
+                    icon: "sun-clock"
+                    on_release : app.root.current ="screen_1"
+
+                MDNavigationRailItem:
+                    text: "Plot"
+                    icon: "file-table"
+                    on_release : app.root.current ="screen_2"
+
+                MDNavigationRailItem:
+                    text: "About"
+                    icon: "creative-commons"
+                    on_release : app.root.current ="screen_3"
+
+                MDNavigationRailItem:
+                    text: "Git"
+                    icon: "git"
+                    on_release : app.root.current ="screen_4"
+
+        MDBoxLayout:
+            orientation : "vertical"
+        
+            MDLabel:
+                text : "This is MDLabel"
+                halign : "center"
+            
+            MDRectangleFlatButton:
+                text : "Change Theme"
+                pos_hint : {"center_x" : 0.5}
+                on_press : app.switch_theme_style()
+                #md_bg_color: app.theme_cls._get_secondary_text_color()
+                #color: app.theme_cls._get_op_text_color()
+                #text_color : app.theme_cls._get_op_text_color()
+                #theme_text_color : "Secondary" 
+                #text_color: "orange"
+                elevation : 0
+                #shadow_softness : 50
+                #  color: 1,0,0,1
+                size: 10, 50
+
+            MDRectangleFlatButton:   
+                text : "Screen 2"
+                on_press : app.root.current ="screen_1"
+
+<AboutScreen>:
+    MDScreen:
+        name : "screen_3"
+        MDBoxLayout:
+
+            MDNavigationRail:
+                elevation: 4
+                shadow_radius: 5
+                shadow_offset: 0, 4
+                MDNavigationRailItem:
+                    text: "Calculator"
+                    icon: "sun-clock"
+                    on_release : app.root.current ="screen_1"
+
+                MDNavigationRailItem:
+                    text: "Plot"
+                    icon: "file-table"
+                    on_release : app.root.current ="screen_2"
+
+                MDNavigationRailItem:
+                    text: "About"
+                    icon: "creative-commons"
+                    on_release : app.root.current ="screen_3"
+
+                MDNavigationRailItem:
+                    text: "Git"
+                    icon: "git"
+                    on_release : app.root.current ="screen_4"
+
+        MDBoxLayout:
+            orientation : "vertical"
+            pos_hint : {"top" : 1}
+        #    md_bg_color:  "green"
+            right : (100)
+            size_hint : 1,.5
+            #spacing: 10
+            MDLabel:
+                pos_hint : {"center_x" : 0.5,"center_y" : 0.5}
+                size_hint : None,None
+                size : (300,100)
+                bold: True
+                font_style: "H5"
+                text : "Solar Calculator"
+                halign : "center" 
+                valign : "center" 
+            
+            MDLabel:
+                pos_hint : {"center_x" : 0.5,"center_y" : 0.5}
+                size_hint : None,None
+                size : (300,100)
+                text : "Solar app for calculating various values related to the sun position and current date&time based on entered location "
+                halign : "center" 
+                valign : "center" 
+
+
+<GitScreen>:
+    MDScreen:
+        name : "screen_4"
+        MDBoxLayout:
+            MDNavigationRail:
+                elevation: 4
+                shadow_radius: 5
+                shadow_offset: 0, 4
+                MDNavigationRailItem:
+                    text: "Calculator"
+                    icon: "sun-clock"
+                    on_release : app.root.current ="screen_1"
+
+                MDNavigationRailItem:
+                    text: "Plot"
+                    icon: "file-table"
+                    on_release : app.root.current ="screen_2"
+
+                MDNavigationRailItem:
+                    text: "About"
+                    icon: "creative-commons"
+                    on_release : app.root.current ="screen_3"
+
+                MDNavigationRailItem:
+                    text: "Git"
+                    icon: "git"
+                    on_release : app.root.current ="screen_4"
+            
+
+
+        MDBoxLayout:
+            orientation : "vertical"
+            pos_hint : {"top" : 1}
+        #    md_bg_color:  "green"
+            right : (100)
+            size_hint : 1,.5
+            spacing: 10
+            
+            MDTextField:
+             #   md_bg_color:  "red"
+                pos_hint : {"center_x" : 0.5,"center_y" : 0.5}
+                size_hint : None,None
+                size : (300,100)
+
+                helper_text: "Repository adress for this project"
+                helper_text_mode: "on_focus"
+                text : "https://github.com/serstuk93/Solar_app"
+                readonly: True 
+                text_color : app.theme_cls.primary_color
+                halign : "center" 
+                valign : "center" 
+
+
+
+               
