@@ -61,8 +61,8 @@ class Solar_Calc(MDApp, CalcSol):
         super().__init__(**kwargs)
         self.resres = None
         self.new_map = None
-        self.t1 = "t1.jpg"
-        self.imt1 = Image(source="t1.jpg")
+        self.t1 = "t1.png"
+        self.imt1 = Image(source="t1.png")
 
     def reset(self):  # function for reset button
         self.result_calc.text = ""
@@ -125,7 +125,7 @@ class Solar_Calc(MDApp, CalcSol):
             
             self.screen.add_widget(
                 Image(
-                    source="t1.jpg",
+                    source="t1.png",
                     nocache=True,
                     allow_stretch=True,
                     keep_ratio=True,
@@ -156,7 +156,7 @@ class Solar_Calc(MDApp, CalcSol):
 
     def build(self):
         self.theme_cls.primary_palette = "Orange"
-        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.theme_style = "Light"
      #   self.theme_cls.primary_hue = "200"  # "500"
         """
         APP builder
@@ -373,7 +373,8 @@ class Solar_Calc(MDApp, CalcSol):
             """
             self.screen.add_widget(
                 Image(
-                    source="t1.jpg",
+                    source="t1.png
+        ",
                     nocache=True,
                     allow_stretch=True,
                     keep_ratio=True,
